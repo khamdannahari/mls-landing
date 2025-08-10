@@ -3,13 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-blue: #2563eb;
+  --secondary-blue: #1d4ed8;
+  --accent-blue: #3b82f6;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border-color: #e5e7eb;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-archia);
+  --font-archia: var(--font-archia);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +28,570 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-archia), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  padding-bottom: 12px; /* ruang deselerasi agar tidak mentok keras di bawah */
+}
+
+/* Kursor kustom: sembunyikan kursor default pada pointer fine */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
+/* Matikan native smooth agar tidak bentrok dengan Lenis */
+html {
+  scroll-behavior: auto;
+  overscroll-behavior: none; /* hindari bounce keras di browser */
+}
+
+/* Rekomendasi: pastikan elements tidak mengaktifkan momentum lain */
+html,
+body {
+  min-height: 100%;
+}
+
+/* Kurangi judder saat transform GPU aktif */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layer kursor */
+@media (pointer: fine) {
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transition: opacity 0.2s ease;
+  }
+
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
+    margin-top: -3px;
+    background: var(--accent-blue);
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+    mix-blend-mode: normal;
+  }
+
+  .cursor-ring {
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    margin-top: -18px;
+    border-radius: 999px;
+    backdrop-filter: blur(2px);
+    background: radial-gradient(
+      circle at center,
+      rgba(59, 130, 246, 0.12) 0%,
+      rgba(59, 130, 246, 0.08) 50%,
+      rgba(59, 130, 246, 0.02) 100%
+    );
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    box-shadow: 0 0 24px rgba(59, 130, 246, 0.25);
+    transform: translateZ(0);
+  }
+
+  .cursor-hidden {
+    opacity: 0;
+  }
+
+  .cursor-active .cursor-ring,
+  .cursor-active.cursor-ring {
+    transform: scale(0.9);
+  }
+
+  .cursor-active.cursor-dot {
+    transform: scale(0.8);
+  }
+
+  .cursor-hover,
+  .cursor-hover.cursor-ring {
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 36px rgba(59, 130, 246, 0.35);
+    background: radial-gradient(
+      circle at center,
+      rgba(59, 130, 246, 0.22) 0%,
+      rgba(59, 130, 246, 0.12) 50%,
+      rgba(59, 130, 246, 0.04) 100%
+    );
+  }
+}
+
+/* Hint GPU pada elemen animasi untuk stabilitas frame */
+.animate-gradient-shift,
+.hover-3d,
+.animate-float,
+.shadow-3xl,
+.backdrop-blur-sm,
+.glass,
+.hero-card,
+.image-card {
+  will-change: transform, opacity, filter;
+}
+
+/* Cegah nested overscroll yang bikin sentakan di dalam section dekoratif */
+section > .pointer-events-none {
+  overscroll-behavior: contain;
+}
+
+.font-archia {
+  font-family: var(--font-archia), Arial, Helvetica, sans-serif;
+}
+
+/* Animasi fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animasi fade in up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* New Out of the Box Animations */
+@keyframes morphing {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes neonGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6;
+  }
+  50% {
+    box-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 30px #3b82f6;
+  }
+}
+
+@keyframes rotate3D {
+  0% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  }
+  25% {
+    transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  }
+  75% {
+    transform: perspective(1000px) rotateY(-5deg) rotateX(-5deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotateX(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Saat sedang scroll, jeda animasi berat agar frame stabil */
+.is-scrolling .animate-gradient-shift,
+.is-scrolling .animate-float,
+.is-scrolling .animate-pulse,
+.is-scrolling .animate-neon-glow,
+.is-scrolling .animate-rotate-3d,
+.is-scrolling .animate-wave,
+.is-scrolling .animate-glitch,
+.is-scrolling .hover-3d,
+.is-scrolling .hero-card,
+.is-scrolling .image-card {
+  animation-play-state: paused !important;
+}
+
+/* New Animation Classes */
+.animate-morphing {
+  animation: morphing 8s ease-in-out infinite;
+}
+
+.animate-glitch {
+  animation: glitch 0.3s ease-in-out infinite;
+}
+
+.animate-neon-glow {
+  animation: neonGlow 2s ease-in-out infinite;
+}
+
+.animate-rotate-3d {
+  animation: rotate3D 4s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave 2s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.8s ease-out;
+}
+
+.animate-slide-in-top {
+  animation: slideInFromTop 1s ease-out;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+.animate-particle-float {
+  animation: particleFloat 3s ease-out infinite;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced hover effects */
+.hover-morph {
+  transition: all 0.5s ease;
+}
+
+.hover-morph:hover {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transform: scale(1.05) rotate(2deg);
+}
+
+.hover-neon {
+  transition: all 0.3s ease;
+}
+
+.hover-neon:hover {
+  box-shadow: 0 0 20px #3b82f6, 0 0 40px #3b82f6;
+  transform: scale(1.02);
+}
+
+.hover-3d {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.hover-3d:hover {
+  transform: perspective(1000px) rotateY(10deg) rotateX(5deg) scale(1.05);
+}
+
+/* Hero card animations */
+.hero-card {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-card:hover {
+  transform: scale(1.05);
+}
+
+/* Smooth image transitions */
+.image-card {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient backgrounds */
+.gradient-blue {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.gradient-light {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* Modern shadow utilities */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Backdrop blur */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Particle effect */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #3b82f6;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* (Revert) Hapus styling khusus scroll-area */
+
+/* DigitalSection SVG styles */
+.animate-dash {
+  stroke-dasharray: 6 10;
+  animation: dash 2s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+.node-glow {
+  fill: #ffffff;
+  stroke: #60a5fa;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.35));
+}
+
+.node-label {
+  font-size: 10px;
+  fill: #374151;
+}
+
+.core-rect {
+  fill: #ffffff;
+  stroke: #3b82f6;
+  stroke-width: 2;
+}
+
+.core-label {
+  font-size: 12px;
+  fill: #1f2937;
+  font-weight: 600;
+}
+
+.lake-rect {
+  fill: #eff6ff;
+  stroke: #93c5fd;
+  stroke-width: 1.5;
+}
+
+.lake-label {
+  font-size: 10px;
+  fill: #1e3a8a;
+  font-weight: 600;
 }
