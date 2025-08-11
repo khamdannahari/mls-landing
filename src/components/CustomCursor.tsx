@@ -96,7 +96,7 @@ export default function CustomCursor() {
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("mouseenter", onMouseEnter);
       window.removeEventListener("mouseleave", onMouseLeave);
-      window.removeEventListener("mouseover", onPointerOver as any);
+      window.removeEventListener("mouseover", onPointerOver);
     };
   }, []);
 

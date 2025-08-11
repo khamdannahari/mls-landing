@@ -10,9 +10,9 @@ const archia = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: "Skillex - Watch. Learn. Grow.",
+  title: "MegaLS - Modern Solutions",
   description:
-    "Unlimited access to 100+ instructors. Get the skills you need for a job that is in demand.",
+    "Technology partner for modern solutions: web, mobile, and digital transformation",
 };
 
 export default function RootLayout({

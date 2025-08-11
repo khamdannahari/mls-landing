@@ -209,7 +209,7 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     },
     footer: {
       companyDesc:
-        "Technology partner for modern solutions: web, mobile, digital transformation, and secure architecture.",
+        "Technology partner for modern solutions: web, mobile, and digital transformation",
       newsletterTitle: "Subscribe for updates",
       newsletterDesc:
         "Get feature updates and case studies straight to your email.",
@@ -322,7 +322,7 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     },
     footer: {
       companyDesc:
-        "Mitra teknologi untuk solusi modern: web, mobile, transformasi digital, dan arsitektur yang aman.",
+        "Mitra teknologi untuk solusi modern: web, mobile, dan transformasi digital",
       newsletterTitle: "Berlangganan update",
       newsletterDesc:
         "Dapatkan info fitur dan studi kasus terbaru langsung ke email Anda.",

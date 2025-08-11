@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Cpu } from "lucide-react";
+import { Cpu, Database } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import {
   SiNextdotjs,
@@ -22,6 +22,10 @@ import {
   SiApple,
   SiFlutter,
   SiHeroku,
+  SiKotlin,
+  SiSwift,
+  SiN8N,
+  SiOllama,
 } from "react-icons/si";
 
 interface TechSectionProps {
@@ -51,11 +55,14 @@ export default function TechSection({ className = "" }: TechSectionProps) {
     { name: "Android", Icon: SiAndroid },
     { name: "iOS", Icon: SiApple },
     { name: "Flutter", Icon: SiFlutter },
+    { name: "React Native", Icon: SiReact },
+    { name: "Kotlin", Icon: SiKotlin },
+    { name: "Swift", Icon: SiSwift },
 
     // Web / UI
+    { name: "TypeScript", Icon: SiTypescript },
     { name: "Next.js", Icon: SiNextdotjs },
     { name: "React", Icon: SiReact },
-    { name: "TypeScript", Icon: SiTypescript },
     { name: "Tailwind CSS", Icon: SiTailwindcss },
 
     // Backend / Runtime
@@ -71,11 +78,16 @@ export default function TechSection({ className = "" }: TechSectionProps) {
     { name: "PostgreSQL", Icon: SiPostgresql },
     { name: "MongoDB", Icon: SiMongodb },
     { name: "Supabase", Icon: SiSupabase },
+    { name: "Neon", Icon: Database },
     { name: "Prisma", Icon: SiPrisma },
 
     // Container / Orchestration
     { name: "Docker", Icon: SiDocker },
     { name: "Kubernetes", Icon: SiKubernetes },
+
+    // Automation / AI
+    { name: "n8n", Icon: SiN8N },
+    { name: "LlamaIndex", Icon: SiOllama },
   ];
 
   return (
