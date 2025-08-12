@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, MessageCircle, Linkedin, Instagram } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -9,11 +9,16 @@ interface FooterProps {
 }
 
 export default function Footer({ className = "" }: FooterProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showError, setShowError] = useState(false);
-  const year = new Date().getFullYear();
+  const [year, setYear] = useState(2024); // Default year untuk server-side
+
+  useEffect(() => {
+    // Update year setelah hydration
+    setYear(new Date().getFullYear());
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +76,7 @@ export default function Footer({ className = "" }: FooterProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("footer.emailPlaceholder")}
+                  autoComplete="off"
                   className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15"
                 />
                 <button

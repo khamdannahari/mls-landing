@@ -11,10 +11,17 @@ interface DigitalSectionProps {
 export default function DigitalSection({
   className = "",
 }: DigitalSectionProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setIsVisible(true),
       { threshold: 0.15 }
@@ -26,7 +33,7 @@ export default function DigitalSection({
         observer.unobserve(el);
       }
     };
-  }, []);
+  }, [isClientHydrated]);
 
   return (
     <section

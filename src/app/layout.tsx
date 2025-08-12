@@ -3,10 +3,12 @@ import { Archivo } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { LanguageProvider } from "@/i18n/LanguageContext";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const archia = Archivo({
   subsets: ["latin"],
   variable: "--font-archia",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,10 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${archia.variable} antialiased`}>
-        <LanguageProvider>
-          <SmoothScroll>{children}</SmoothScroll>
-        </LanguageProvider>
+      <body
+        className={`${archia.variable} antialiased`}
+        suppressHydrationWarning={true}
+      >
+        <LoadingScreen>
+          <LanguageProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+          </LanguageProvider>
+        </LoadingScreen>
       </body>
     </html>
   );

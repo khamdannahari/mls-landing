@@ -10,13 +10,20 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ className = "" }: HeroSectionProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated) return;
+
     setIsVisible(true);
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -25,9 +32,11 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isClientHydrated]);
 
   useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     const measureHeader = () => {
       const header = document.querySelector("header") as HTMLElement | null;
       setHeaderHeight(header ? header.offsetHeight : 0);
@@ -35,7 +44,28 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
     measureHeader();
     window.addEventListener("resize", measureHeader);
     return () => window.removeEventListener("resize", measureHeader);
-  }, []);
+  }, [isClientHydrated]);
+
+  // Jangan render konten sampai hydration selesai
+  if (!isHydrated || !isClientHydrated) {
+    return (
+      <section
+        id="home"
+        className={`flex items-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 min-h-[100svh] lg:h-[100svh] pb-16 sm:pb-20 md:pb-24 lg:pb-0 ${className}`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Modern Solutions
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Technology partner for modern solutions
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const heroCards = [
     {

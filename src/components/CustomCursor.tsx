@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function lerp(start: number, end: number, factor: number): number {
   return start + (end - start) * factor;
@@ -9,9 +9,14 @@ function lerp(start: number, end: number, factor: number): number {
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated || typeof window === "undefined") return;
 
     const isFinePointer = window.matchMedia("(pointer: fine)").matches;
     if (!isFinePointer) return; // Jangan render pada perangkat touch
@@ -98,7 +103,12 @@ export default function CustomCursor() {
       window.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("mouseover", onPointerOver);
     };
-  }, []);
+  }, [isHydrated]);
+
+  // Jangan render cursor sampai hydration selesai
+  if (!isHydrated) {
+    return null;
+  }
 
   // Render dua layer untuk dot dan ring
   return (

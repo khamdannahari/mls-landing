@@ -1,19 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Monitor, Code2, Globe, Sparkles } from "lucide-react";
-import ResponsivePreview from "./ResponsivePreview";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { Globe, Code, Zap, Shield } from "lucide-react";
+import ResponsivePreview from "@/components/ResponsivePreview";
 
 interface WebSectionProps {
   className?: string;
 }
 
 export default function WebSection({ className = "" }: WebSectionProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setIsVisible(true),
       { threshold: 0.15 }
@@ -25,11 +32,11 @@ export default function WebSection({ className = "" }: WebSectionProps) {
         observer.unobserve(el);
       }
     };
-  }, []);
+  }, [isClientHydrated]);
 
   const features = [
     {
-      icon: <Code2 className="w-5 h-5 text-white" />,
+      icon: <Code className="w-5 h-5 text-white" />,
       title: t("web.features.customTitle"),
       desc: t("web.features.customDesc"),
       bg: "from-blue-600 to-indigo-600",
@@ -41,7 +48,7 @@ export default function WebSection({ className = "" }: WebSectionProps) {
       bg: "from-sky-500 to-blue-600",
     },
     {
-      icon: <Sparkles className="w-5 h-5 text-white" />,
+      icon: <Zap className="w-5 h-5 text-white" />,
       title: t("web.features.uiTitle"),
       desc: t("web.features.uiDesc"),
       bg: "from-cyan-500 to-blue-500",
@@ -58,7 +65,7 @@ export default function WebSection({ className = "" }: WebSectionProps) {
         >
           <div>
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-6">
-              <Monitor className="w-4 h-4 mr-2" /> {t("web.pill")}
+              <Shield className="w-4 h-4 mr-2" /> {t("web.pill")}
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
               {t("web.title")}

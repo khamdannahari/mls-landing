@@ -33,10 +33,17 @@ interface TechSectionProps {
 }
 
 export default function TechSection({ className = "" }: TechSectionProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setIsVisible(true),
       { threshold: 0.15 }
@@ -48,7 +55,7 @@ export default function TechSection({ className = "" }: TechSectionProps) {
         observer.unobserve(el);
       }
     };
-  }, []);
+  }, [isClientHydrated]);
 
   const techStacks = [
     // Mobile first

@@ -19,11 +19,18 @@ interface MobileSectionProps {
 }
 
 export default function MobileSection({ className = "" }: MobileSectionProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [screenIndex, setScreenIndex] = useState(0);
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setIsVisible(true),
       { threshold: 0.15 }
@@ -31,9 +38,11 @@ export default function MobileSection({ className = "" }: MobileSectionProps) {
     const el = document.getElementById("mobile");
     if (el) observer.observe(el);
     return () => {
-      if (el) observer.unobserve(el);
+      if (el) {
+        observer.unobserve(el);
+      }
     };
-  }, []);
+  }, [isClientHydrated]);
 
   useEffect(() => {
     if (!isVisible) return;

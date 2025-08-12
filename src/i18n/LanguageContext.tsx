@@ -18,6 +18,7 @@ type LanguageContextValue = {
   lang: SupportedLanguage;
   setLang: (lang: SupportedLanguage) => void;
   t: (key: string) => string;
+  isHydrated: boolean;
 };
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(
@@ -25,35 +26,42 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
 );
 
 function getInitialLang(): SupportedLanguage {
-  if (typeof document !== "undefined") {
-    const cookie = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("lang="));
-    const value = cookie?.split("=")[1];
-    if (value === "en" || value === "id") return value;
+  // Default ke "en" untuk server-side rendering
+  if (typeof document === "undefined") {
+    return "en";
   }
+
+  const cookie = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("lang="));
+  const value = cookie?.split("=")[1];
+  if (value === "en" || value === "id") return value;
   return "en";
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<SupportedLanguage>(getInitialLang);
+  const [lang, setLangState] = useState<SupportedLanguage>("en");
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Initialize language after hydration
+  useEffect(() => {
+    const initialLang = getInitialLang();
+    setLangState(initialLang);
+    setIsHydrated(true);
+
+    // Update HTML lang attribute
+    document.documentElement.lang = initialLang === "en" ? "en" : "id";
+  }, []);
 
   const setLang = useCallback((next: SupportedLanguage) => {
     setLangState(next);
     // Simpan 1 tahun
-    document.cookie = `lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    // Update <html lang="...">
     if (typeof document !== "undefined") {
+      document.cookie = `lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}`;
+      // Update <html lang="...">
       document.documentElement.lang = next === "en" ? "en" : "id";
     }
   }, []);
-
-  useEffect(() => {
-    // sinkronkan atribut html saat mount
-    if (typeof document !== "undefined") {
-      document.documentElement.lang = lang === "en" ? "en" : "id";
-    }
-  }, [lang]);
 
   const t = useCallback(
     (key: string) => getFromPath(translations[lang], key),
@@ -61,8 +69,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 
   const value = useMemo<LanguageContextValue>(
-    () => ({ lang, setLang, t }),
-    [lang, setLang, t]
+    () => ({ lang, setLang, t, isHydrated }),
+    [lang, setLang, t, isHydrated]
   );
 
   return (

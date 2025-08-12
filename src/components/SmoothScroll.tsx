@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, type PropsWithChildren } from "react";
+import { useEffect, type PropsWithChildren, useState } from "react";
 import CustomCursor from "@/components/CustomCursor";
 import Lenis from "lenis";
 
 export default function SmoothScroll({ children }: PropsWithChildren) {
+  const [isHydrated, setIsHydrated] = useState(false);
+
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated || typeof window === "undefined") return;
+
     const lenis = new Lenis({
       // Best practice: gunakan duration + easing (ease-out expo)
       duration: 1.6,
@@ -73,7 +81,7 @@ export default function SmoothScroll({ children }: PropsWithChildren) {
     };
 
     // Auto-scroll ke hash saat initial load (deep link)
-    if (typeof window !== "undefined" && window.location.hash) {
+    if (window.location.hash) {
       const id = window.location.hash.slice(1);
       const targetEl = document.getElementById(id);
       if (targetEl) {
@@ -118,7 +126,7 @@ export default function SmoothScroll({ children }: PropsWithChildren) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (window as any).navigateLenis;
     };
-  }, []);
+  }, [isHydrated]);
 
   return (
     <>

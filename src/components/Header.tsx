@@ -19,12 +19,19 @@ interface HeaderProps {
 }
 
 export default function Header({ className = "" }: HeaderProps) {
-  const { t } = useLanguage();
+  const { t, isHydrated } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<SectionId>("home");
+  const [isClientHydrated, setIsClientHydrated] = useState(false);
 
   useEffect(() => {
+    setIsClientHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClientHydrated || typeof window === "undefined") return;
+
     // Tidak perlu nama, kita simpan active by section id
     let ticking = false;
     const onScroll = () => {
@@ -89,7 +96,7 @@ export default function Header({ className = "" }: HeaderProps) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [isClientHydrated]);
 
   const menuItems: Array<{ id: SectionId; href: string; label: string }> = [
     { id: "home", href: "#home", label: t("header.home") },
@@ -138,6 +145,27 @@ export default function Header({ className = "" }: HeaderProps) {
     // Update hash di URL (tanpa memicu lompatan)
     window.history.pushState(null, "", targetHash);
   };
+
+  // Jangan render sampai hydration selesai
+  if (!isHydrated || !isClientHydrated) {
+    return (
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-2 md:pt-3 bg-transparent ${className}`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900 font-archia flex items-center">
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  MegaLS
+                </span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header
