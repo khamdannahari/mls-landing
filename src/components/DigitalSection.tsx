@@ -31,6 +31,26 @@ export default function DigitalSection({
   className = "",
 }: DigitalSectionProps) {
   const { t } = useLanguage();
+  const splitIntoTwoLines = (text: string, maxCharsPerLine = 28) => {
+    const normalized = text.trim();
+    if (normalized.length <= maxCharsPerLine) {
+      return { line1: normalized, line2: undefined as string | undefined };
+    }
+    const breakAt = (str: string, limit: number) => {
+      if (str.length <= limit) return { head: str, tail: "" };
+      const idx = str.lastIndexOf(" ", limit);
+      if (idx === -1)
+        return { head: str.slice(0, limit), tail: str.slice(limit) };
+      return { head: str.slice(0, idx), tail: str.slice(idx + 1) };
+    };
+    const first = breakAt(normalized, maxCharsPerLine);
+    if (!first.tail) {
+      return { line1: first.head, line2: undefined as string | undefined };
+    }
+    const second = breakAt(first.tail.trim(), maxCharsPerLine);
+    const line2 = second.tail ? `${second.head}…` : second.head;
+    return { line1: first.head, line2 };
+  };
   const [isVisible, setIsVisible] = useState(false);
   const [isClientHydrated, setIsClientHydrated] = useState(false);
 
@@ -152,11 +172,24 @@ export default function DigitalSection({
 
             {/* Fitur utama */}
             <motion.div
-              className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4"
+              className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-4"
               variants={container}
               initial="hidden"
               animate={isVisible ? "show" : "hidden"}
             >
+              {/* AI Assist - tampil hanya di mobile */}
+              <motion.div
+                variants={item}
+                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d sm:hidden"
+              >
+                <Brain className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
+                <div className="font-semibold text-gray-900 mb-1">
+                  {t("digital.features.aiAssistTitle")}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {t("digital.features.aiAssistDesc")}
+                </div>
+              </motion.div>
               <motion.div
                 variants={item}
                 className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
@@ -167,18 +200,6 @@ export default function DigitalSection({
                 </div>
                 <div className="text-sm text-gray-600">
                   {t("digital.features.automationDesc")}
-                </div>
-              </motion.div>
-              <motion.div
-                variants={item}
-                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
-              >
-                <Brain className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
-                <div className="font-semibold text-gray-900 mb-1">
-                  {t("digital.features.aiAssistTitle")}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {t("digital.features.aiAssistDesc")}
                 </div>
               </motion.div>
               <motion.div
@@ -311,15 +332,25 @@ export default function DigitalSection({
                         >
                           {s.title}
                         </text>
-                        <text
-                          x={s.x}
-                          y={s.y + 48}
-                          textAnchor="middle"
-                          className="node-label"
-                          fill="#6b7280"
-                        >
-                          {s.desc}
-                        </text>
+                        {(() => {
+                          const { line1, line2 } = splitIntoTwoLines(s.desc);
+                          return (
+                            <text
+                              x={s.x}
+                              y={s.y + 48}
+                              textAnchor="middle"
+                              className="node-label"
+                              fill="#6b7280"
+                            >
+                              <tspan x={s.x}>{line1}</tspan>
+                              {line2 && (
+                                <tspan x={s.x} dy="14">
+                                  {line2}
+                                </tspan>
+                              )}
+                            </text>
+                          );
+                        })()}
                       </g>
                     ))}
                   </svg>

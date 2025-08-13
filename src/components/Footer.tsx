@@ -123,12 +123,12 @@ export default function Footer({ className = "" }: FooterProps) {
                   <MessageCircle className="w-4 h-4" />
                 </span>
                 <a
-                  href="https://wa.me/6281234567890"
+                  href="https://wa.me/62859106948201"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  +62 812 3456 7890
+                  +62 859 1069 48201
                 </a>
               </li>
             </ul>
