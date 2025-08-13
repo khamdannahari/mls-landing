@@ -185,7 +185,7 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
         automationTitle: "Automation",
         automationDesc: "Workflow, rules, SLA.",
         aiAssistTitle: "AI Assist",
-        aiAssistDesc: "Validation & recommendations.",
+        aiAssistDesc: "Validation & insights.",
         integrationTitle: "Integration",
         integrationDesc: "API & webhook.",
         analyticsTitle: "Analytics",

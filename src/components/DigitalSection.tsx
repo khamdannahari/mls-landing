@@ -1,7 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Settings2, Workflow, BarChart3, Brain, Webhook } from "lucide-react";
+import {
+  Settings2,
+  Workflow,
+  BarChart3,
+  Brain,
+  Webhook,
+  Map,
+  PencilRuler,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
+
+interface StepNode {
+  x: number;
+  y: number;
+  n: number;
+  title: string;
+  desc: string;
+  icon: LucideIcon;
+}
 import { useLanguage } from "@/i18n/LanguageContext";
 
 interface DigitalSectionProps {
@@ -11,7 +30,7 @@ interface DigitalSectionProps {
 export default function DigitalSection({
   className = "",
 }: DigitalSectionProps) {
-  const { t, isHydrated } = useLanguage();
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [isClientHydrated, setIsClientHydrated] = useState(false);
 
@@ -35,6 +54,76 @@ export default function DigitalSection({
     };
   }, [isClientHydrated]);
 
+  const container = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.08, delayChildren: 0.08 },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 14, scale: 1 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const fadeLeft = {
+    hidden: { opacity: 0, x: -20 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const fadeRight = {
+    hidden: { opacity: 0, x: 20 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const steps: StepNode[] = [
+    {
+      x: 80,
+      y: 150,
+      n: 1,
+      title: t("digital.steps.mapTitle"),
+      desc: t("digital.steps.mapDesc"),
+      icon: Map,
+    },
+    {
+      x: 220,
+      y: 90,
+      n: 2,
+      title: t("digital.steps.designTitle"),
+      desc: t("digital.steps.designDesc"),
+      icon: PencilRuler,
+    },
+    {
+      x: 380,
+      y: 210,
+      n: 3,
+      title: t("digital.steps.automateTitle"),
+      desc: t("digital.steps.automateDesc"),
+      icon: Settings2,
+    },
+    {
+      x: 520,
+      y: 150,
+      n: 4,
+      title: t("digital.steps.orchestrateTitle"),
+      desc: t("digital.steps.orchestrateDesc"),
+      icon: Workflow,
+    },
+  ];
+
   return (
     <section
       id="digital"
@@ -43,7 +132,11 @@ export default function DigitalSection({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
           {/* Left: Copy & Feature grid */}
-          <div className={`${isVisible ? "animate-slide-left" : "opacity-0"}`}>
+          <motion.div
+            variants={fadeLeft}
+            initial="hidden"
+            animate={isVisible ? "show" : "hidden"}
+          >
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-6">
               <Settings2 className="w-4 h-4 mr-2" aria-hidden />{" "}
               {t("digital.pill")}
@@ -58,8 +151,16 @@ export default function DigitalSection({
             {/* Langkah divisualisasikan pada ilustrasi di sisi kanan */}
 
             {/* Fitur utama */}
-            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d">
+            <motion.div
+              className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4"
+              variants={container}
+              initial="hidden"
+              animate={isVisible ? "show" : "hidden"}
+            >
+              <motion.div
+                variants={item}
+                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
+              >
                 <Workflow className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
                 <div className="font-semibold text-gray-900 mb-1">
                   {t("digital.features.automationTitle")}
@@ -67,8 +168,11 @@ export default function DigitalSection({
                 <div className="text-sm text-gray-600">
                   {t("digital.features.automationDesc")}
                 </div>
-              </div>
-              <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d">
+              </motion.div>
+              <motion.div
+                variants={item}
+                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
+              >
                 <Brain className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
                 <div className="font-semibold text-gray-900 mb-1">
                   {t("digital.features.aiAssistTitle")}
@@ -76,8 +180,11 @@ export default function DigitalSection({
                 <div className="text-sm text-gray-600">
                   {t("digital.features.aiAssistDesc")}
                 </div>
-              </div>
-              <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d">
+              </motion.div>
+              <motion.div
+                variants={item}
+                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
+              >
                 <Webhook className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
                 <div className="font-semibold text-gray-900 mb-1">
                   {t("digital.features.integrationTitle")}
@@ -85,8 +192,11 @@ export default function DigitalSection({
                 <div className="text-sm text-gray-600">
                   {t("digital.features.integrationDesc")}
                 </div>
-              </div>
-              <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d">
+              </motion.div>
+              <motion.div
+                variants={item}
+                className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover-lift hover-3d"
+              >
                 <BarChart3 className="w-5 h-5 text-blue-600 mb-2" aria-hidden />
                 <div className="font-semibold text-gray-900 mb-1">
                   {t("digital.features.analyticsTitle")}
@@ -94,12 +204,16 @@ export default function DigitalSection({
                 <div className="text-sm text-gray-600">
                   {t("digital.features.analyticsDesc")}
                 </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
           {/* Right: Animated network illustration */}
-          <div className={`${isVisible ? "animate-slide-right" : "opacity-0"}`}>
+          <motion.div
+            variants={fadeRight}
+            initial="hidden"
+            animate={isVisible ? "show" : "hidden"}
+          >
             <div className="relative bg-white rounded-3xl border border-gray-100 shadow-3xl p-6 hover-3d">
               <div className="h-80 gradient-light rounded-xl relative overflow-hidden">
                 <svg
@@ -123,47 +237,17 @@ export default function DigitalSection({
                   />
 
                   {/* Step nodes */}
-                  {[
-                    {
-                      x: 80,
-                      y: 150,
-                      n: 1,
-                      title: t("digital.steps.mapTitle"),
-                      desc: t("digital.steps.mapDesc"),
-                    },
-                    {
-                      x: 220,
-                      y: 90,
-                      n: 2,
-                      title: t("digital.steps.designTitle"),
-                      desc: t("digital.steps.designDesc"),
-                    },
-                    {
-                      x: 380,
-                      y: 210,
-                      n: 3,
-                      title: t("digital.steps.automateTitle"),
-                      desc: t("digital.steps.automateDesc"),
-                    },
-                    {
-                      x: 520,
-                      y: 150,
-                      n: 4,
-                      title: t("digital.steps.orchestrateTitle"),
-                      desc: t("digital.steps.orchestrateDesc"),
-                    },
-                  ].map((s) => (
+                  {steps.map((s) => (
                     <g key={s.n}>
                       <circle cx={s.x} cy={s.y} r="18" className="node-glow" />
-                      <text
-                        x={s.x}
-                        y={s.y + 3}
-                        textAnchor="middle"
-                        fontSize="10"
-                        fill="#1f2937"
-                      >
-                        {s.n}
-                      </text>
+                      {(() => {
+                        const Icon = s.icon;
+                        return (
+                          <g transform={`translate(${s.x - 8}, ${s.y - 8})`}>
+                            <Icon width={16} height={16} color="#1f2937" />
+                          </g>
+                        );
+                      })()}
                       <text
                         x={s.x}
                         y={s.y + 34}
@@ -193,7 +277,7 @@ export default function DigitalSection({
                 style={{ animationDelay: "1s" }}
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

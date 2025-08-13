@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import Image from "next/image";
 import { Brain, Zap, Rocket } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface HeroSectionProps {
   className?: string;
@@ -109,6 +110,40 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
     }
   };
 
+  const fadeUp = {
+    hidden: { opacity: 0, y: 24 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const fadeRight = {
+    hidden: { opacity: 0, x: 32 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const titleContainer = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    },
+  };
+
+  const titleLine = {
+    hidden: { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
   return (
     <section
       id="home"
@@ -135,37 +170,41 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16 xl:gap-20 items-center">
           {/* Left Content */}
-          <div
-            className={`space-y-10 lg:col-span-1 ${
-              isVisible ? "animate-fade-in" : "opacity-0"
-            }`}
+          <motion.div
+            className={`space-y-10 lg:col-span-1`}
+            variants={fadeUp}
+            initial="hidden"
+            animate={isVisible ? "show" : "hidden"}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 font-archia overflow-visible">
-              <span
-                className="block bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent animate-fade-in-up"
-                style={{ animationDelay: "0.2s" }}
+              <motion.div
+                variants={titleContainer}
+                initial="hidden"
+                animate={isVisible ? "show" : "hidden"}
               >
-                {t("hero.build")}
-              </span>
-              <span
-                className="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-fade-in-up"
-                style={{ animationDelay: "0.4s" }}
-              >
-                {t("hero.innovate")}
-              </span>
-              <span
-                className="block bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent animate-fade-in-up whitespace-nowrap"
-                style={{ animationDelay: "0.6s" }}
-              >
-                {t("hero.transform")}
-              </span>
+                <motion.span
+                  variants={titleLine}
+                  className="block bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent"
+                >
+                  {t("hero.build")}
+                </motion.span>
+                <motion.span
+                  variants={titleLine}
+                  className="block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                >
+                  {t("hero.innovate")}
+                </motion.span>
+                <motion.span
+                  variants={titleLine}
+                  className="block bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent whitespace-nowrap"
+                >
+                  {t("hero.transform")}
+                </motion.span>
+              </motion.div>
             </h1>
 
             {/* Search Input and Button */}
-            <div
-              className="flex items-center space-x-4 max-w-md animate-fade-in-up"
-              style={{ animationDelay: "1s" }}
-            >
+            <div className="flex items-center space-x-4 max-w-md animate-fade-in-up">
               <div className="flex-1 relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 <input
@@ -182,10 +221,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
             </div>
 
             {/* Features */}
-            <div
-              className="flex items-center space-x-6 pt-4 animate-fade-in-up"
-              style={{ animationDelay: "1.2s" }}
-            >
+            <div className="flex items-center space-x-6 pt-4 animate-fade-in-up">
               <div className="text-center group">
                 <div className="flex justify-center mb-2">
                   <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg group-hover:scale-110 transition-transform duration-300">
@@ -228,13 +264,14 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Content - Image Cards */}
-          <div
-            className={`relative lg:col-span-2 ${
-              isVisible ? "animate-fade-in" : "opacity-0"
-            }`}
+          <motion.div
+            className={`relative lg:col-span-2`}
+            variants={fadeRight}
+            initial="hidden"
+            animate={isVisible ? "show" : "hidden"}
             style={{ animationDelay: "0.5s" }}
           >
             <div className="flex space-x-6 h-[44vh] sm:h-[48vh] md:h-[52vh] lg:h-[54vh] xl:h-[56vh] 2xl:h-[58vh] max-h-[700px]">
@@ -359,7 +396,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -13,6 +13,7 @@ import {
   Activity,
 } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { motion } from "framer-motion";
 
 interface MobileSectionProps {
   className?: string;
@@ -90,6 +91,29 @@ export default function MobileSection({ className = "" }: MobileSectionProps) {
 
   // tech badges dihilangkan sesuai permintaan
 
+  const container = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  };
+
+  const fadeLeft = {
+    hidden: { opacity: 0, x: -32 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { type: "spring", stiffness: 140, damping: 18 },
+    },
+  };
+
+  const fadeRight = {
+    hidden: { opacity: 0, x: 32 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { type: "spring", stiffness: 140, damping: 18 },
+    },
+  };
+
   return (
     <section
       id="mobile"
@@ -115,13 +139,14 @@ export default function MobileSection({ className = "" }: MobileSectionProps) {
           <p className="mt-4 text-gray-600 text-lg">{t("mobile.desc")}</p>
         </div>
 
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-center ${
-            isVisible ? "animate-fade-in" : "opacity-0"
-          }`}
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+          variants={container}
+          initial="hidden"
+          animate={isVisible ? "show" : "hidden"}
         >
           {/* Phone mockup */}
-          <div className="relative mx-auto">
+          <motion.div className="relative mx-auto" variants={fadeLeft}>
             <div className="absolute -inset-6 bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 rounded-[2.5rem] blur-xl animate-gradient-shift" />
             <div className="relative w-[220px] h-[440px] sm:w-[260px] sm:h-[520px] rounded-[2.2rem] bg-gray-900 p-2 shadow-3xl hover-3d">
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-5 bg-black/60 rounded-full" />
@@ -217,10 +242,10 @@ export default function MobileSection({ className = "" }: MobileSectionProps) {
                 <AppWindow className="w-5 h-5 text-blue-700" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Content */}
-          <div>
+          <motion.div variants={fadeRight}>
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
               {t("mobile.contentTitle")}
             </h3>
@@ -244,8 +269,8 @@ export default function MobileSection({ className = "" }: MobileSectionProps) {
             </div>
 
             {/* badges & CTA dihilangkan sesuai permintaan */}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
