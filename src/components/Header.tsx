@@ -170,7 +170,7 @@ export default function Header({ className = "" }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-2 md:pt-3 ${
-        scrolled
+        scrolled || isMenuOpen
           ? "bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg"
           : "bg-transparent"
       } ${className}`}
