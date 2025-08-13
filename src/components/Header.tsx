@@ -172,11 +172,15 @@ export default function Header({ className = "" }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-2 md:pt-3 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-2 md:pt-3 w-full transform-gpu will-change-transform ${
         scrolled || isMenuOpen
           ? "bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg"
           : "bg-transparent"
       } ${className}`}
+      style={{
+        paddingLeft: "env(safe-area-inset-left)",
+        paddingRight: "env(safe-area-inset-right)",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div ref={topBarRef} className="flex justify-between items-center h-20">

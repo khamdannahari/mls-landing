@@ -196,7 +196,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                 </motion.span>
                 <motion.span
                   variants={titleLine}
-                  className="block bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent whitespace-nowrap"
+                  className="block bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent"
                 >
                   {t("hero.transform")}
                 </motion.span>

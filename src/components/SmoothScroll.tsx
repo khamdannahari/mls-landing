@@ -14,6 +14,25 @@ export default function SmoothScroll({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") return;
 
+    // Matikan Lenis pada perangkat touch untuk mencegah overshoot scroll di mobile
+    const isCoarsePointer = (() => {
+      const coarse =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(pointer: coarse)").matches;
+      const navMaybe = navigator as unknown as
+        | { maxTouchPoints?: number }
+        | undefined;
+      const touchPoints =
+        navMaybe && typeof navMaybe.maxTouchPoints === "number"
+          ? navMaybe.maxTouchPoints
+          : 0;
+      return coarse || touchPoints > 0;
+    })();
+    if (isCoarsePointer) {
+      // Jangan inisialisasi Lenis pada perangkat touch; gunakan native scrolling
+      return;
+    }
+
     const lenis = new Lenis({
       // Best practice: gunakan duration + easing (ease-out expo)
       duration: 1.6,

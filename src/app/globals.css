@@ -42,14 +42,26 @@ body {
 
 /* Matikan native smooth agar tidak bentrok dengan Lenis */
 html {
+  /* Di desktop, kita biarkan auto karena Lenis yang mengendalikan */
   scroll-behavior: auto;
   overscroll-behavior: none; /* hindari bounce keras di browser */
+  width: 100%;
+  overflow-x: hidden; /* cegah overflow horizontal awal di iOS/Safari */
+}
+
+/* Di perangkat touch, aktifkan native smooth scroll dan inertial scroll default */
+@media (pointer: coarse) {
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior: auto;
+  }
 }
 
 /* Rekomendasi: pastikan elements tidak mengaktifkan momentum lain */
 html,
 body {
   min-height: 100%;
+  width: 100%;
 }
 
 /* Kurangi judder saat transform GPU aktif */
