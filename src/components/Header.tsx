@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -24,6 +24,7 @@ export default function Header({ className = "" }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<SectionId>("home");
   const [isClientHydrated, setIsClientHydrated] = useState(false);
+  const topBarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsClientHydrated(true);
@@ -107,10 +108,12 @@ export default function Header({ className = "" }: HeaderProps) {
   ];
 
   const getHeaderOffset = () => {
-    // Perkiraan tinggi header untuk offset agar section tidak ketutup header fixed
-    const header = document.querySelector("header");
-    const height = header ? (header as HTMLElement).offsetHeight : 80;
-    return height + 8; // tambahan margin kecil
+    // Gunakan tinggi bar atas saja agar offset konsisten saat menu mobile expand/collapse
+    const height = topBarRef.current ? topBarRef.current.offsetHeight : 80;
+    const isMobileViewport =
+      typeof window !== "undefined" ? window.innerWidth < 768 : false;
+    const extraSpacing = isMobileViewport ? 12 : 8; // beri ruang ekstra sedikit di mobile
+    return height + extraSpacing;
   };
 
   const handleMenuClick = (
@@ -176,7 +179,7 @@ export default function Header({ className = "" }: HeaderProps) {
       } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div ref={topBarRef} className="flex justify-between items-center h-20">
           {/* Logo with Animation */}
           <div className="flex items-center group cursor-pointer">
             <h1 className="text-2xl font-bold text-gray-900 font-archia flex items-center transition-all duration-300 group-hover:scale-105">
