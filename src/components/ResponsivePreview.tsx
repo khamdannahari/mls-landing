@@ -17,7 +17,7 @@ export default function ResponsivePreview({
   // Konsistensi tinggi canvas; lebar akan menyesuaikan per viewport
   const CANVAS_HEIGHT_CLASS = "h-[420px]";
   const viewportWidthClass = {
-    desktop: "w-full",
+    desktop: "w-[1200px] max-w-full",
     tablet: "w-[768px] max-w-full",
     mobile: "w-[360px] max-w-full",
   } as const;
@@ -49,7 +49,7 @@ export default function ResponsivePreview({
   const Desktop = () => (
     <div className="grid grid-cols-12 gap-x-4 gap-y-4">
       <main className="col-span-12 min-w-0">
-        <div className="grid grid-cols-3 gap-x-3 gap-y-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-3">
           {renderCards(12)}
         </div>
       </main>
@@ -71,16 +71,16 @@ export default function ResponsivePreview({
   return (
     <div className={className}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-red-400" />
           <div className="w-3 h-3 rounded-full bg-yellow-400" />
           <div className="w-3 h-3 rounded-full bg-green-400" />
         </div>
-        <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-lg border border-gray-100">
+        <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-lg border border-gray-100 shrink-0 overflow-x-auto max-w-full mt-2 sm:mt-0">
           <button
             onClick={() => setViewport("desktop")}
-            className={`cursor-pointer flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`cursor-pointer flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs font-medium transition ${
               viewport === "desktop"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-white"
@@ -90,7 +90,7 @@ export default function ResponsivePreview({
           </button>
           <button
             onClick={() => setViewport("tablet")}
-            className={`cursor-pointer flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`cursor-pointer flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs font-medium transition ${
               viewport === "tablet"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-white"
@@ -100,7 +100,7 @@ export default function ResponsivePreview({
           </button>
           <button
             onClick={() => setViewport("mobile")}
-            className={`cursor-pointer flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition ${
+            className={`cursor-pointer flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs font-medium transition ${
               viewport === "mobile"
                 ? "bg-blue-600 text-white"
                 : "text-gray-600 hover:bg-white"
@@ -115,9 +115,7 @@ export default function ResponsivePreview({
       <div
         className={`rounded-2xl border border-gray-100 bg-white p-4 shadow-3xl ${CANVAS_HEIGHT_CLASS} flex items-stretch justify-center`}
       >
-        <div
-          className={`${viewportWidthClass[viewport]} h-full overflow-y-auto`}
-        >
+        <div className={`${viewportWidthClass[viewport]} h-full overflow-auto`}>
           <div className="min-h-full px-3 md:px-4 pb-4">
             {viewport === "desktop" && <Desktop />}
             {viewport === "tablet" && <TabletView />}
