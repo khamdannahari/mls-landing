@@ -10,28 +10,12 @@ interface FooterProps {
 
 export default function Footer({ className = "" }: FooterProps) {
   const { t, isHydrated } = useLanguage();
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showError, setShowError] = useState(false);
   const [year, setYear] = useState(2024); // Default year untuk server-side
 
   useEffect(() => {
     // Update year setelah hydration
     setYear(new Date().getFullYear());
   }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setIsSubmitted(true);
-      setShowError(false);
-      setEmail("");
-      setTimeout(() => setIsSubmitted(false), 3000);
-    } else {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 3000);
-    }
-  };
 
   // Footer navigation removed as requested
 
@@ -59,46 +43,6 @@ export default function Footer({ className = "" }: FooterProps) {
 
             {/* Navigation removed */}
             <div className="mb-2" />
-
-            {/* Newsletter */}
-            <div className="mb-6">
-              <h4 className="text-lg font-semibold text-white mb-3">
-                {t("footer.newsletterTitle")}
-              </h4>
-              <p className="text-gray-400 mb-4">{t("footer.newsletterDesc")}</p>
-
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-2"
-              >
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t("footer.emailPlaceholder")}
-                  autoComplete="off"
-                  className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:from-blue-700 hover:to-indigo-700 transition-colors"
-                >
-                  {t("footer.send")}
-                </button>
-              </form>
-
-              {/* Success/Error Messages */}
-              {isSubmitted && (
-                <p className="text-green-600 text-sm mt-2 animate-fade-in">
-                  {t("footer.success")}
-                </p>
-              )}
-              {showError && (
-                <p className="text-red-600 text-sm mt-2 animate-fade-in">
-                  {t("footer.error")}
-                </p>
-              )}
-            </div>
           </div>
 
           {/* Contact */}

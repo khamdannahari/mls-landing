@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/i18n/LanguageContext";
 import Image from "next/image";
-import { Brain, Zap, Rocket } from "lucide-react";
+import { Brain, Zap, Rocket, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface HeroSectionProps {
@@ -203,23 +203,6 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
               </motion.div>
             </h1>
 
-            {/* Search Input and Button */}
-            <div className="flex items-center space-x-4 max-w-md animate-fade-in-up">
-              <div className="flex-1 relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                <input
-                  type="email"
-                  placeholder={t("hero.emailPlaceholder")}
-                  className="relative w-full px-6 py-4 bg-white/80 backdrop-blur-sm border-2 border-gray-200 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 font-archia shadow-lg"
-                />
-              </div>
-              <button className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-archia shadow-lg transform hover:scale-105 hover:shadow-xl cursor-pointer group overflow-hidden">
-                <span className="relative z-10">{t("header.contact")}</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              </button>
-            </div>
-
             {/* Features */}
             <div className="flex items-center space-x-6 pt-4 animate-fade-in-up">
               <div className="text-center group">
@@ -263,6 +246,21 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
                   {t("hero.features.futureBottom")}
                 </div>
               </div>
+            </div>
+
+            {/* Email Button */}
+            <div className="flex justify-start animate-fade-in-up">
+              <button
+                onClick={() =>
+                  window.open("mailto:khamdannahari.id@gmail.com", "_blank")
+                }
+                className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-archia shadow-lg transform hover:scale-105 hover:shadow-xl cursor-pointer group overflow-hidden flex items-center space-x-2"
+              >
+                <Mail className="w-5 h-5 relative z-10" />
+                <span className="relative z-10">Email Us</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
             </div>
           </motion.div>
 

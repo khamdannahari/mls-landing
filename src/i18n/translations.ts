@@ -9,6 +9,7 @@ type TranslationDictionary = {
     tech: string;
     contact: string;
     language: string;
+    whatsappMessage: string;
   };
   hero: {
     build: string;
@@ -119,8 +120,10 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
       mobile: "Mobile",
       digital: "Digital",
       tech: "Tech",
-      contact: "Contact Us",
+      contact: "WhatsApp",
       language: "Language",
+      whatsappMessage:
+        "Hello! I'm interested in MegaLS services. Can I ask for more information?",
     },
     hero: {
       build: "Build.",
@@ -233,8 +236,10 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
       mobile: "Seluler",
       digital: "Digital",
       tech: "Teknologi",
-      contact: "Hubungi Kami",
+      contact: "WhatsApp",
       language: "Bahasa",
+      whatsappMessage:
+        "Halo! Saya tertarik dengan layanan MegaLS. Bisa saya tanya lebih lanjut?",
     },
     hero: {
       build: "Build.",
